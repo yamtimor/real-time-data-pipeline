@@ -7,7 +7,8 @@ producer = Producer(KAFKA_CONFIG)
 
 def send_to_kafka(key: str, value: dict):
     try:
-        producer.produce(TOPIC_NAME, key=key, value=json.dumps(value))
+        message = json.dumps(value, ensure_ascii=False)
+        producer.produce(TOPIC_NAME, key=key, value=message.encode("utf-8"))
         producer.flush()
         return {"status": "success", "message": "Event sent to Kafka"}
     except Exception as e:
